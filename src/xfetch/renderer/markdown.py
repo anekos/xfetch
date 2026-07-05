@@ -1,5 +1,6 @@
 from io import StringIO
 
+from xfetch.format import format_price
 from xfetch.models import Article, Fetched, Product
 from xfetch.renderer.base import BaseRenderer
 
@@ -11,7 +12,7 @@ def _link(fetched: Fetched) -> str:
 def _price(fetched: Fetched) -> str | None:
     if not isinstance(fetched, Product) or fetched.price is None:
         return None
-    price = f"Price: {fetched.price}"
+    price = f"Price: {format_price(fetched.price)}"
     if fetched.currency is not None:
         price += f" {fetched.currency}"
     return price
