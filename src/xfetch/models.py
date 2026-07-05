@@ -27,3 +27,14 @@ class Product(Article):
     description: str | None = None
     thumbnail_url: str | None = None
     raw: Any | None = None
+
+
+class Book(Product):
+    url: str
+    name: str
+    price: float | None = None
+    currency: str = "JPY"
+    description: str | None = None
+    thumbnail_url: str | None = None
+    pages: int | None = None
+    raw: Any | None = None

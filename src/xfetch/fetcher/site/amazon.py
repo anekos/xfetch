@@ -5,7 +5,7 @@ from zyte_api import ZyteAPI
 
 from xfetch.cache import ZyteCache
 from xfetch.fetcher.base import BaseFetcher
-from xfetch.models import Fetched, Product
+from xfetch.models import Book, Fetched, Product
 from xfetch.secrets import ZYTE_API_KEY
 
 
@@ -25,15 +25,26 @@ class AmazonFetcher(BaseFetcher):
 
         p = response["product"]
 
-        return Product(
-            name=p["name"],
-            url=self.cleanup_url(p["canonicalUrl"]),
-            description=p.get("description"),
-            thumbnail_url=dig(p, "mainImage.url"),
-            price=(p.get("price") or p.get("regularPrice")),
+        props = p["additionalProperties"]
+        pages: int | None = None
+        for prop in props:
+            if m := re.search(r"([,\d]+)\s*ページ", prop["value"]):
+                pages = int(re.sub(",", "", m.group(1)))
+
+        base = dict(
             currency=p.get("currency"),
+            description=p.get("description"),
+            name=p["name"],
+            price=(p.get("price") or p.get("regularPrice")),
+            thumbnail_url=dig(p, "mainImage.url"),
+            url=self.cleanup_url(p["canonicalUrl"]),
             raw=response,
         )
+
+        if pages is not None:
+            return Book(pages=pages, **base)
+
+        return Product(**base)
 
     def cleanup_url(self, url: str) -> str:
         if match := re.search(
