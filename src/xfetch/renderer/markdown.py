@@ -31,7 +31,7 @@ class MarkdownHeadingRenderer(BaseRenderer):
         print(f"# {_link(fetched)}", file=buffer)
         print("", file=buffer)
 
-        if isinstance(fetched, Product) and fetched.thumbnail_url is not None:
+        if isinstance(fetched, Article) and fetched.thumbnail_url is not None:
             print(
                 f"[![{fetched.thumbnail_url}]({fetched.thumbnail_url})]({fetched.url})",
                 file=buffer,
