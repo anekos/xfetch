@@ -4,12 +4,13 @@ from typing import Any
 from pydantic import BaseModel
 
 
-class Fetched(ABC):
+class Fetched(BaseModel, ABC):
     url: str
+    name: str
     raw: Any | None
 
 
-class Product(Fetched, BaseModel):
+class Product(Fetched):
     url: str
     name: str
     price: float | None = None

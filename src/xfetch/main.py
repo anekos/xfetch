@@ -1,6 +1,10 @@
+from typing import cast, get_args
+
 import click
 
 from xfetch.fetcher.site.amazon import fetch as fetch_amazon
+from xfetch.renderer.byname import Name as RendererName
+from xfetch.renderer.byname import render
 
 
 @click.group()
@@ -12,9 +16,16 @@ def main(ctx: click.Context) -> None:
 
 @main.command("fetch")
 @click.argument("URL", type=str, required=True)
-def main_fetch(url: str) -> None:
+@click.option(
+    "--format",
+    "-f",
+    type=click.Choice(get_args(RendererName)),
+    default="markdown-heading",
+)
+def main_fetch(url: str, format: str) -> None:
     product = fetch_amazon(url)
-    print(product.raw)
+    rendered = render(product, cast(RendererName, format))
+    print(rendered)
 
 
 if __name__ == "__main__":
