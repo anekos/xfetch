@@ -28,6 +28,7 @@ class AmazonFetcher(BaseFetcher):
         return Product(
             name=p["name"],
             url=self.cleanup_url(p["canonicalUrl"]),
+            description=p.get("description"),
             thumbnail_url=dig(p, "mainImage.url"),
             price=(p.get("price") or p.get("regularPrice")),
             currency=p.get("currency"),
