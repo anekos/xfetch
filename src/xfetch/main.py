@@ -21,6 +21,8 @@ def main(ctx: click.Context) -> None:
     "-f",
     type=click.Choice(get_args(RendererName)),
     default="markdown-heading",
+    show_default=True,
+    help="Output format.",
 )
 def main_fetch(url: str, format: str) -> None:
     fetched = fetch(url)
