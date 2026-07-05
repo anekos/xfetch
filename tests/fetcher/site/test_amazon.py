@@ -1,6 +1,6 @@
 import pytest
 
-from xfetch.fetcher.site.amazon import AmazonFetcher
+from xfetch.fetcher.site.amazon import cleanup_url
 
 
 @pytest.mark.parametrize(
@@ -25,9 +25,9 @@ from xfetch.fetcher.site.amazon import AmazonFetcher
     ],
 )
 def test_cleanup_url_strips_title_slug_across_domains(url: str, expected: str) -> None:
-    assert AmazonFetcher().cleanup_url(url) == expected
+    assert cleanup_url(url) == expected
 
 
 def test_cleanup_url_returns_input_unchanged_when_not_matching() -> None:
     url = "https://example.com/foo"
-    assert AmazonFetcher().cleanup_url(url) == url
+    assert cleanup_url(url) == url

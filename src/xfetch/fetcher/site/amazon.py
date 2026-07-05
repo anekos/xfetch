@@ -37,7 +37,7 @@ class AmazonFetcher(BaseFetcher):
             name=p["name"],
             price=(p.get("price") or p.get("regularPrice")),
             thumbnail_url=dig(p, "mainImage.url"),
-            url=self.cleanup_url(p["canonicalUrl"]),
+            url=cleanup_url(p["canonicalUrl"]),
             raw=response,
         )
 
@@ -46,11 +46,10 @@ class AmazonFetcher(BaseFetcher):
 
         return Product(**base)
 
-    def cleanup_url(self, url: str) -> str:
-        if match := re.search(
-            r"^https://www\.(amazon\.[a-z.]+)/[^/]+/dp/([A-Z0-9]+)", url
-        ):
-            domain = match.group(1)
-            asin = match.group(2)
-            return f"https://www.{domain}/dp/{asin}"
-        return url
+
+def cleanup_url(url: str) -> str:
+    if match := re.search(r"^https://www\.(amazon\.[a-z.]+)/[^/]+/dp/([A-Z0-9]+)", url):
+        domain = match.group(1)
+        asin = match.group(2)
+        return f"https://www.{domain}/dp/{asin}"
+    return url
