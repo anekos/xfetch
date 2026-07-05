@@ -10,7 +10,16 @@ class Fetched(BaseModel, ABC):
     raw: Any | None
 
 
-class Product(Fetched):
+class Article(Fetched):
+    url: str
+    name: str
+    content: str | None = None
+    description: str | None = None
+    thumbnail_url: str | None = None
+    raw: Any | None = None
+
+
+class Product(Article):
     url: str
     name: str
     price: float | None = None

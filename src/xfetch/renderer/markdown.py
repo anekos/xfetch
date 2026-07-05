@@ -1,6 +1,6 @@
 from io import StringIO
 
-from xfetch.models import Fetched, Product
+from xfetch.models import Article, Fetched, Product
 from xfetch.renderer.base import BaseRenderer
 
 
@@ -22,5 +22,9 @@ class MarkdownHeadingRenderer(BaseRenderer):
                 if fetched.currency is not None:
                     print(f" {fetched.currency}", end="", file=buffer)
                 print("", file=buffer)
+
+        if isinstance(fetched, Article):
+            if description := fetched.description:
+                print(f"- {description}", file=buffer)
 
         return buffer.getvalue()

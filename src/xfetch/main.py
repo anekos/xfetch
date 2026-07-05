@@ -2,7 +2,7 @@ from typing import cast, get_args
 
 import click
 
-from xfetch.fetcher.site.amazon import fetch as fetch_amazon
+from xfetch.fetcher.by_url import fetch
 from xfetch.renderer.byname import Name as RendererName
 from xfetch.renderer.byname import render
 
@@ -23,8 +23,8 @@ def main(ctx: click.Context) -> None:
     default="markdown-heading",
 )
 def main_fetch(url: str, format: str) -> None:
-    product = fetch_amazon(url)
-    rendered = render(product, cast(RendererName, format))
+    fetched = fetch(url)
+    rendered = render(fetched, cast(RendererName, format))
     print(rendered)
 
 
