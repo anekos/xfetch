@@ -36,8 +36,9 @@ class AmazonFetcher(BaseFetcher):
 
     def cleanup_url(self, url: str) -> str:
         if match := re.search(
-            r"^https://www\.amazon\.co\.jp/[^/]+/dp/([A-Z0-9]+)", url
+            r"^https://www\.(amazon\.[a-z.]+)/[^/]+/dp/([A-Z0-9]+)", url
         ):
-            asin = match.group(1)
-            return f"https://www.amazon.co.jp/dp/{asin}"
+            domain = match.group(1)
+            asin = match.group(2)
+            return f"https://www.{domain}/dp/{asin}"
         return url

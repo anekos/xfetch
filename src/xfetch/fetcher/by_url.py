@@ -12,6 +12,6 @@ def fetch(url: str) -> Fetched:
 
 def get_fetcher(url: str) -> type[BaseFetcher]:
     hostname = urlparse(url).hostname or ""
-    if hostname == "amazon.co.jp" or hostname.endswith(".amazon.co.jp"):
+    if "amazon" in hostname.split("."):
         return AmazonFetcher
     return CommonFetcher
