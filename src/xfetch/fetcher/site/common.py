@@ -29,5 +29,5 @@ class CommonFetcher(BaseFetcher):
             name=a["headline"],
             raw=response,
             thumbnail_url=dig(a, "mainImage.url"),
-            url=a["canonicalUrl"],
+            url=a.get("canonicalUrl", url),
         )
