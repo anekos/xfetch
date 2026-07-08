@@ -5,6 +5,12 @@ from xfetch.models import Article, Fetched, Product
 from xfetch.renderer.base import BaseRenderer
 
 
+def _list_item(prefix: str, text: str) -> str:
+    indent = " " * len(prefix)
+    lines = text.split("\n")
+    return prefix + ("\n" + indent).join(lines)
+
+
 def _link(fetched: Fetched) -> str:
     return f"[{fetched.name}]({fetched.url})"
 
@@ -38,10 +44,10 @@ class MarkdownHeadingRenderer(BaseRenderer):
             )
 
         if price := _price(fetched):
-            print(f"- {price}", file=buffer)
+            print(_list_item("- ", price), file=buffer)
 
         if description := _description(fetched):
-            print(f"- {description}", file=buffer)
+            print(_list_item("- ", description), file=buffer)
 
         return buffer.getvalue()
 
@@ -69,10 +75,10 @@ class MarkdownDefinitionListRenderer(BaseRenderer):
 class MarkdownListRenderer(BaseRenderer):
     def render(self, fetched: Fetched) -> str:
         details = [d for d in (_price(fetched), _description(fetched)) if d]
-        line = f"- {_link(fetched)}"
+        text = _link(fetched)
         if details:
-            line += " - " + " / ".join(details)
-        return line
+            text += " - " + " / ".join(details)
+        return _list_item("- ", text)
 
 
 class MarkdownListDetailRenderer(BaseRenderer):
@@ -82,9 +88,9 @@ class MarkdownListDetailRenderer(BaseRenderer):
         print(f"- {_link(fetched)}", file=buffer)
 
         if price := _price(fetched):
-            print(f"  - {price}", file=buffer)
+            print(_list_item("  - ", price), file=buffer)
 
         if description := _description(fetched):
-            print(f"  - {description}", file=buffer)
+            print(_list_item("  - ", description), file=buffer)
 
         return buffer.getvalue()
