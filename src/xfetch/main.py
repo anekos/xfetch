@@ -5,6 +5,7 @@ import click
 from xfetch.fetcher.by_url import fetch
 from xfetch.renderer.byname import Name as RendererName
 from xfetch.renderer.byname import render, resolve_name
+from xfetch.summarizer import summarize_description
 
 
 @click.group()
@@ -35,8 +36,17 @@ def _resolve_format(
     help=f"Output format ({', '.join(get_args(RendererName))});"
     " initials like 'mhq' also work.",
 )
-def main_fetch(url: str, format: RendererName) -> None:
+@click.option(
+    "--summary",
+    is_flag=True,
+    default=False,
+    help="Summarize the description using the Anthropic API"
+    " (requires XFETCH_ANTHROPIC_API_KEY).",
+)
+def main_fetch(url: str, format: RendererName, summary: bool) -> None:
     fetched = fetch(url)
+    if summary:
+        summarize_description(fetched)
     rendered = render(fetched, format)
     print(rendered)
 
