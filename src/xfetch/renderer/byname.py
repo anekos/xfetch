@@ -5,6 +5,7 @@ from xfetch.renderer.base import BaseRenderer
 from xfetch.renderer.basic import JsonRenderer
 from xfetch.renderer.markdown import (
     MarkdownDefinitionListRenderer,
+    MarkdownHeadingContentRenderer,
     MarkdownHeadingRenderer,
     MarkdownLinkRenderer,
     MarkdownListDetailRenderer,
@@ -13,6 +14,7 @@ from xfetch.renderer.markdown import (
 
 Name = Literal[
     "markdown-heading",
+    "markdown-heading-content",
     "markdown-link",
     "markdown-definition-list",
     "markdown-list",
@@ -31,6 +33,8 @@ def get_renderer(name: Name) -> type[BaseRenderer]:
             return JsonRenderer
         case "markdown-heading":
             return MarkdownHeadingRenderer
+        case "markdown-heading-content":
+            return MarkdownHeadingContentRenderer
         case "markdown-link":
             return MarkdownLinkRenderer
         case "markdown-definition-list":

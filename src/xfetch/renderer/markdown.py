@@ -66,6 +66,29 @@ class MarkdownHeadingRenderer(BaseRenderer):
         return buffer.getvalue()
 
 
+class MarkdownHeadingContentRenderer(BaseRenderer):
+    def render(self, fetched: Fetched) -> str:
+        buffer = StringIO()
+
+        print(f"# {_link(fetched)}", file=buffer)
+        print("", file=buffer)
+
+        if isinstance(fetched, Article) and fetched.thumbnail_url is not None:
+            print(
+                f"[![{fetched.thumbnail_url}]({fetched.thumbnail_url})]({fetched.url})",
+                file=buffer,
+            )
+
+        if isinstance(fetched, Article) and fetched.description is not None:
+            print(fetched.description, file=buffer)
+
+        if price := _price(fetched):
+            print("", file=buffer)
+            print(f"- {price}", file=buffer)
+
+        return buffer.getvalue()
+
+
 class MarkdownLinkRenderer(BaseRenderer):
     def render(self, fetched: Fetched) -> str:
         return _link(fetched)
