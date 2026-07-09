@@ -1,6 +1,6 @@
 import re
 
-from dictlib import dig
+from dictlib import dig_get
 from zyte_api import ZyteAPI
 
 from xfetch.cache import ZyteCache
@@ -36,7 +36,7 @@ class AmazonFetcher(BaseFetcher):
             description=p.get("description"),
             name=p["name"],
             price=(p.get("price") or p.get("regularPrice")),
-            thumbnail_url=dig(p, "mainImage.url"),
+            thumbnail_url=dig_get(p, "mainImage.url", None),
             url=cleanup_url(p["canonicalUrl"]),
             raw=response,
         )

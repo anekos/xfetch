@@ -1,4 +1,4 @@
-from dictlib import dig
+from dictlib import dig_get
 from zyte_api import ZyteAPI
 
 from xfetch.cache import ZyteCache
@@ -28,6 +28,6 @@ class CommonFetcher(BaseFetcher):
             description=a.get("description"),
             name=a["headline"],
             raw=response,
-            thumbnail_url=dig(a, "mainImage.url"),
+            thumbnail_url=dig_get(a, "mainImage.url", None),
             url=a.get("canonicalUrl", url),
         )
