@@ -25,7 +25,7 @@ class AmazonFetcher(BaseFetcher):
 
         p = response["product"]
 
-        props = p["additionalProperties"]
+        props = p.get("additionalProperties", [])
         pages: int | None = None
         for prop in props:
             if m := re.search(r"([,\d]+)\s*ページ", prop["value"]):
