@@ -23,21 +23,21 @@ class AmazonFetcher(BaseFetcher):
             )
             ZyteCache.set(url, response)
 
-        p = response["product"]
+        p = response.get("product") or {}
 
         props = p.get("additionalProperties", [])
         pages: int | None = None
         for prop in props:
-            if m := re.search(r"([,\d]+)\s*ページ", prop["value"]):
+            if m := re.search(r"([,\d]+)\s*ページ", prop.get("value") or ""):
                 pages = int(re.sub(",", "", m.group(1)))
 
         base = dict(
             currency=p.get("currency"),
             description=p.get("description"),
-            name=p["name"],
+            name=p.get("name"),
             price=(p.get("price") or p.get("regularPrice")),
             thumbnail_url=dig_get(p, "mainImage.url", None),
-            url=cleanup_url(p["canonicalUrl"]),
+            url=cleanup_url(p.get("canonicalUrl") or url),
             raw=response,
         )
 

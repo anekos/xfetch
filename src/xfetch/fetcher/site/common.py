@@ -21,13 +21,13 @@ class CommonFetcher(BaseFetcher):
             )
             ZyteCache.set(url, response)
 
-        a = response["article"]
+        a = response.get("article") or {}
 
         return Article(
             content=a.get("articleBody"),
             description=a.get("description"),
-            name=a["headline"],
+            name=a.get("headline"),
             raw=response,
             thumbnail_url=dig_get(a, "mainImage.url", None),
-            url=a.get("canonicalUrl", url),
+            url=a.get("canonicalUrl") or url,
         )

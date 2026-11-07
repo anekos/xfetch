@@ -26,6 +26,8 @@ def _join_lines(text: str) -> str:
 
 
 def _link(fetched: Fetched) -> str:
+    if not fetched.name:
+        return f"<{fetched.url}>"
     return f"[{fetched.name}]({fetched.url})"
 
 
